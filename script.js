@@ -23,6 +23,7 @@ const I18N = {
     certTitle: 'Аттестаты наших гидов',
     routesEyebrow: 'Куда поедем',
     routesTitle: 'Маршруты',
+    routeSource: 'Источник маршрута',
 
     routes: [
       {
@@ -187,7 +188,7 @@ const I18N = {
     theme: 'Тема',
     language: 'Язык',
     error: 'Пожалуйста, заполните имя и телефон.',
-    formInfo: 'Форма готова к работе — для отправки заявок подключите backend или Telegram Bot API.'
+    formInfo: 'Открываем WhatsApp с готовым сообщением — осталось нажать «Отправить».'
   },
 
   en: {
@@ -214,6 +215,7 @@ const I18N = {
     certTitle: "Our guides' certificates",
     routesEyebrow: 'Where to go',
     routesTitle: 'Routes',
+    routeSource: 'Route source',
 
     routes: [
       {
@@ -378,12 +380,17 @@ const I18N = {
     theme: 'Theme',
     language: 'Language',
     error: 'Please fill in your name and phone.',
-    formInfo: 'The form is ready to work — connect a backend or Telegram Bot API to receive requests.'
+    formInfo: 'Opening WhatsApp with your message ready — just press Send.'
   }
 };
 
-let lang = localStorage.getItem('cg_lang') || 'ru';
-let theme = localStorage.getItem('cg_theme') || 'dark';
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
+let lang = store.get('cg_lang') === 'en' ? 'en' : 'ru';
+let theme = store.get('cg_theme') === 'light' ? 'light' : 'dark';
 
 const nav = document.getElementById('mainNav');
 const navLinks = nav ? nav.querySelectorAll('a') : [];
@@ -461,73 +468,40 @@ function applyLanguage() {
       setText(header.querySelector('h2'), t.routesTitle);
     }
 
-    const routeEls = routesSection.querySelectorAll('.route');
+    // Content keys for each route, in page order: [static block], accordion, accordion...
+    const ROUTE_KEYS = [
+      ['expect', 'learn', 'optional', 'organization', 'meeting'],
+      ['expect', 'extra', 'important'],
+      ['expect', 'finish', 'organization'],
+      ['expect', 'organization'],
+      ['expect', 'organization']
+    ];
 
-    routeEls.forEach((routeEl, index) => {
+    routesSection.querySelectorAll('.route').forEach((routeEl, index) => {
       const data = t.routes[index];
       if (!data) return;
 
       setText(routeEl.querySelector('h3'), data.title);
       setText(routeEl.querySelector('.route-lead'), data.lead);
 
-      const details = routeEl.querySelectorAll('.route-accordion');
-      const summaries = routeEl.querySelectorAll('.route-accordion summary');
+      routeEl.querySelectorAll('.route-block, .route-accordion').forEach((item, i) => {
+        const key = ROUTE_KEYS[index][i];
+        if (!key) return;
 
-      if (index === 0) {
-        if (summaries[0]) summaries[0].textContent = data.labels[0];
-        if (summaries[1]) summaries[1].textContent = data.labels[1];
-        if (summaries[2]) summaries[2].textContent = data.labels[2];
-        if (summaries[3]) summaries[3].textContent = data.labels[3];
+        if (item.tagName === 'DETAILS') {
+          setText(item.querySelector('summary'), data.labels[i]);
+          setText(item.querySelector('.acc-body'), data[key]);
+        } else {
+          setText(item.querySelector('h4'), data.labels[i]);
+          setText(item.querySelector('p'), data[key]);
+        }
+      });
 
-        const bodies = routeEl.querySelectorAll('.acc-body');
-        if (bodies[0]) setText(bodies[0], data.expect);
-        if (bodies[1]) setText(bodies[1], data.learn);
-        if (bodies[2]) setText(bodies[2], data.optional);
-        if (bodies[3]) setText(bodies[3], data.organization);
-        if (bodies[4]) setText(bodies[4], data.meeting);
+      const warning = routeEl.querySelector('.route-warning');
+      if (warning && data.warning) setText(warning, data.warning);
 
-        setText(routeEl.querySelector('.route-warning'), data.warning);
-      }
-
-      if (index === 1) {
-        if (summaries[0]) summaries[0].textContent = data.labels[0];
-        if (summaries[1]) summaries[1].textContent = data.labels[1];
-        if (summaries[2]) summaries[2].textContent = data.labels[2];
-
-        const bodies = routeEl.querySelectorAll('.acc-body');
-        if (bodies[0]) setText(bodies[0], data.expect);
-        if (bodies[1]) setText(bodies[1], data.extra);
-        if (bodies[2]) setText(bodies[2], data.important);
-      }
-
-      if (index === 2) {
-        if (summaries[0]) summaries[0].textContent = data.labels[0];
-        if (summaries[1]) summaries[1].textContent = data.labels[1];
-        if (summaries[2]) summaries[2].textContent = data.labels[2];
-
-        const bodies = routeEl.querySelectorAll('.acc-body');
-        if (bodies[0]) setText(bodies[0], data.expect);
-        if (bodies[1]) setText(bodies[1], data.finish);
-        if (bodies[2]) setText(bodies[2], data.organization);
-      }
-
-      if (index === 3) {
-        if (summaries[0]) summaries[0].textContent = data.labels[0];
-        if (summaries[1]) summaries[1].textContent = data.labels[1];
-
-        const bodies = routeEl.querySelectorAll('.acc-body');
-        if (bodies[0]) setText(bodies[0], data.expect);
-        if (bodies[1]) setText(bodies[1], data.organization);
-      }
-
-      if (index === 4) {
-        if (summaries[0]) summaries[0].textContent = data.labels[0];
-        if (summaries[1]) summaries[1].textContent = data.labels[1];
-
-        const bodies = routeEl.querySelectorAll('.acc-body');
-        if (bodies[0]) setText(bodies[0], data.expect);
-        if (bodies[1]) setText(bodies[1], data.organization);
-      }
+      const source = routeEl.querySelector('.route-source a');
+      if (source) source.textContent = t.routeSource;
     });
   }
 
@@ -536,7 +510,7 @@ function applyLanguage() {
     setText(fleet.querySelector('.eyebrow'), t.fleetEyebrow);
     setText(fleet.querySelector('h2'), t.fleetTitle);
 
-    const intro = fleet.querySelector('p[style*="max-width"]');
+    const intro = fleet.querySelector('.fleet-intro');
     setText(intro, t.fleetIntro);
 
     const cats = fleet.querySelectorAll('.fleet-cat');
@@ -594,6 +568,12 @@ function applyLanguage() {
 
     if (footerColumns[1]) {
       setText(footerColumns[1].querySelector('h5'), t.footerNav);
+
+      const navMap = { '#about': 0, '#certificates': 1, '#routes': 2, '#fleet': 3, '#contact': 4 };
+      footerColumns[1].querySelectorAll('a').forEach(a => {
+        const i = navMap[a.getAttribute('href')];
+        if (i !== undefined) a.textContent = t.nav[i];
+      });
     }
 
     if (footerColumns[2]) {
@@ -640,7 +620,7 @@ function applyLanguage() {
 
 function toggleLanguage() {
   lang = lang === 'ru' ? 'en' : 'ru';
-  localStorage.setItem('cg_lang', lang);
+  store.set('cg_lang', lang);
   applyLanguage();
 }
 
@@ -664,7 +644,7 @@ function applyTheme() {
 
 function toggleTheme() {
   theme = theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('cg_theme', theme);
+  store.set('cg_theme', theme);
   applyTheme();
 }
 
@@ -713,12 +693,14 @@ if (burger && nav) {
   burger.addEventListener('click', () => {
     burger.classList.toggle('open');
     nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', nav.classList.contains('open'));
   });
 
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       burger.classList.remove('open');
       nav.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
     });
   });
 }
@@ -734,9 +716,6 @@ if (toTop) {
   });
 }
 
-document.querySelectorAll('section > .container, section .reveal, .reveal')
-  .forEach(el => el.classList.add('reveal'));
-
 const io = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -745,7 +724,8 @@ const io = new IntersectionObserver(entries => {
     }
   });
 }, {
-  threshold: 0.15
+  threshold: 0,
+  rootMargin: '0px 0px -8% 0px'
 });
 
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
@@ -797,7 +777,7 @@ const GALLERIES = {
     'Grozny/GroznyTwel.jpg',
     'Grozny/GroznyTwo.jpg'
   ],
-  'c-r3': [
+  'c-r5': [
     'Golden/Golden.jpg',
     'Golden/GoldenCheto.jpg',
     'Golden/GoldenEight.jpg',
@@ -826,7 +806,7 @@ const GALLERIES = {
     'Switzerland/SwitzerlandThree.jpg',
     'Switzerland/SwitzerlandTwo.jpg'
   ],
-  'c-r5': [
+  'c-r3': [
     'Ossetia/Ossetia.jpg',
     'Ossetia/OssetiaCheto.jpg',
     'Ossetia/OssetiaEight.jpg',
@@ -923,6 +903,7 @@ function openLightbox(list, index) {
   lbIndex = index;
   renderLightbox();
   lb.classList.add('open');
+  document.body.classList.add('no-scroll');
 }
 
 function renderLightbox() {
@@ -938,12 +919,18 @@ function renderLightbox() {
   lbCount.textContent = `${lbIndex + 1} / ${lbList.length}`;
 }
 
-document.getElementById('lbClose').addEventListener('click', () => {
+function closeLightbox() {
   lb.classList.remove('open');
+  document.body.classList.remove('no-scroll');
+  lbContent.innerHTML = '';
+}
+
+document.getElementById('lbClose').addEventListener('click', () => {
+  closeLightbox();
 });
 
 lb.addEventListener('click', e => {
-  if (e.target === lb) lb.classList.remove('open');
+  if (e.target === lb) closeLightbox();
 });
 
 document.getElementById('lbPrev').addEventListener('click', () => {
@@ -959,7 +946,7 @@ document.getElementById('lbNext').addEventListener('click', () => {
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
 
-  if (e.key === 'Escape') lb.classList.remove('open');
+  if (e.key === 'Escape') closeLightbox();
   if (e.key === 'ArrowLeft') document.getElementById('lbPrev').click();
   if (e.key === 'ArrowRight') document.getElementById('lbNext').click();
 });
@@ -991,7 +978,7 @@ const certTrack = document.getElementById('certTrack');
   if (c.pdf) {
     div.innerHTML = `<div class="pdf-ico">PDF</div><div class="cert-name">${c.name}</div>`;
   } else {
-    div.innerHTML = `<img src="${c.img}" alt="${c.name}" loading="lazy"><div class="cert-name">${c.name}</div>`;
+    div.innerHTML = `<img src="${c.img}" alt="${c.name}" loading="lazy" draggable="false">${c.name ? `<div class="cert-name">${c.name}</div>` : ''}`;
   }
 
   div.addEventListener('click', () => {
@@ -1001,31 +988,26 @@ const certTrack = document.getElementById('certTrack');
   certTrack.appendChild(div);
 });
 
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 Object.keys(GALLERIES).forEach(id => {
   const root = document.getElementById(id);
-
   if (!root) return;
 
   const track = root.querySelector('.carousel-track');
   const list = GALLERIES[id];
-  const isFleet = root.classList.contains('fleet-photos');
   const label = ALT_LABELS[id] || 'Caucasus tour';
 
+  // Rendered twice so the strip can loop seamlessly.
   [...list, ...list].forEach((src, i) => {
     const img = document.createElement('img');
 
     img.src = src;
     img.loading = 'lazy';
-    img.alt = `${label} — photo ${(i % list.length) + 1}`;
+    img.draggable = false;
     img.className = 'carousel-item';
-
-    img.style.cssText = isFleet
-      ? 'width:260px;height:180px;object-fit:cover;border-radius:2px;cursor:pointer'
-      : 'width:220px;height:290px;object-fit:cover;border-radius:2px;cursor:pointer';
-
-    img.addEventListener('click', () => {
-      openLightbox(list, i % list.length);
-    });
+    img.alt = `${label} — photo ${(i % list.length) + 1}`;
+    img.addEventListener('click', () => openLightbox(list, i % list.length));
 
     track.appendChild(img);
   });
@@ -1033,213 +1015,222 @@ Object.keys(GALLERIES).forEach(id => {
 
 function initCarousel(root) {
   const track = root.querySelector('.carousel-track');
-
   if (!track || !track.children.length) return;
 
-  const originalCount = track.children.length / 2;
+  // Controls live in a wrapper so they never become extra grid items.
+  const wrap = document.createElement('div');
+  wrap.className = 'carousel-wrap';
+  root.replaceWith(wrap);
+  wrap.appendChild(root);
+
+  const count = track.children.length / 2;
+  const autoplay = root.dataset.autoplay === '1' && !reduceMotion.matches;
+  const speed = 0.4; // px per 16.7ms frame
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
 
   let pos = 0;
-  let speed = 0.4;
-  let paused = false;
+  let hover = false;
   let dragging = false;
+  let captured = false;
+  let visible = true;
+  let hold = false;
+  let holdTimer = null;
+  let anim = null;
   let startX = 0;
   let startPos = 0;
-  let resumeTimer = null;
+  let moved = 0;
+  let lastDot = -1;
+  let lastTime = 0;
 
-  const half = () => track.scrollWidth / 2;
+  const itemW = () => track.children[0].getBoundingClientRect().width + gap;
+  const period = () => count * itemW();
 
-  const gapStr =
-    getComputedStyle(track).columnGap ||
-    getComputedStyle(track).gap ||
-    '18px';
-
-  const gap = parseFloat(gapStr) || 18;
-
-  const itemW = () =>
-    track.children[0].getBoundingClientRect().width + gap;
-
-  function wrap() {
-    if (pos > 0) pos -= half();
-    if (-pos >= half()) pos += half();
+  function wrapPos() {
+    const p = period();
+    if (p > 0) pos = -((((-pos) % p) + p) % p);
   }
 
-  function render() {
-    track.style.transform = `translateX(${pos}px)`;
-    updateDots();
-  }
-
-  function step() {
-    if (!paused && !dragging) {
-      pos -= speed;
-
-      if (Math.abs(pos) >= half()) pos = 0;
-
-      render();
-    }
-
-    requestAnimationFrame(step);
-  }
-
-  requestAnimationFrame(step);
-
-  root.addEventListener('mouseenter', () => paused = true);
-
-  root.addEventListener('mouseleave', () => {
-    if (!dragging) paused = false;
-  });
-
-  function down(x) {
-    dragging = true;
-    paused = true;
-    startX = x;
-    startPos = pos;
-    track.classList.add('dragging');
-  }
-
-  function move(x) {
-    if (!dragging) return;
-
-    pos = startPos + (x - startX);
-    render();
-  }
-
-  function up() {
-    dragging = false;
-    paused = false;
-    track.classList.remove('dragging');
-    wrap();
-    render();
-  }
-
-  root.addEventListener('mousedown', e => down(e.clientX));
-  window.addEventListener('mousemove', e => move(e.clientX));
-  window.addEventListener('mouseup', up);
-
-  root.addEventListener('touchstart', e => {
-    down(e.touches[0].clientX);
-  }, { passive: true });
-
-  root.addEventListener('touchmove', e => {
-    move(e.touches[0].clientX);
-  }, { passive: true });
-
-  root.addEventListener('touchend', up);
-
-  function tempPause() {
-    paused = true;
-
-    clearTimeout(resumeTimer);
-
-    resumeTimer = setTimeout(() => {
-      if (!dragging) paused = false;
-    }, 2500);
-  }
-
-  function goTo(delta) {
-    tempPause();
-
-    pos -= delta * itemW();
-
-    wrap();
-    render();
-  }
-
+  // Controls
   const controls = document.createElement('div');
   controls.className = 'carousel-controls';
-
-  const arrows = document.createElement('div');
-  arrows.className = 'carousel-arrows';
-
-  const prevBtn = document.createElement('button');
-  prevBtn.type = 'button';
-  prevBtn.className = 'car-arrow';
-  prevBtn.setAttribute('aria-label', 'Previous photo');
-  prevBtn.textContent = '‹';
-
-  const nextBtn = document.createElement('button');
-  nextBtn.type = 'button';
-  nextBtn.className = 'car-arrow';
-  nextBtn.setAttribute('aria-label', 'Next photo');
-  nextBtn.textContent = '›';
-
-  prevBtn.addEventListener('click', () => goTo(-1));
-  nextBtn.addEventListener('click', () => goTo(1));
-
-  arrows.append(prevBtn, nextBtn);
 
   const dotsWrap = document.createElement('div');
   dotsWrap.className = 'carousel-dots';
 
-  const maxDots = Math.min(originalCount, 10);
-  const dotEls = [];
+  const dots = [];
+  const dotCount = Math.min(count, 10);
 
-  for (let i = 0; i < maxDots; i++) {
+  for (let i = 0; i < dotCount; i++) {
     const d = document.createElement('button');
-
     d.type = 'button';
     d.setAttribute('aria-label', 'Go to photo ' + (i + 1));
-
     d.addEventListener('click', () => {
-      tempPause();
-      pos = -(i * itemW());
-      wrap();
-      render();
+      pause(3000);
+      anim = { from: pos, to: -Math.round(i * count / dotCount) * itemW(), t0: performance.now() };
     });
-
-    dotEls.push(d);
+    dots.push(d);
     dotsWrap.appendChild(d);
   }
 
-  function updateDots() {
-    if (!dotEls.length) return;
+  const arrows = document.createElement('div');
+  arrows.className = 'carousel-arrows';
 
-    const h = half();
-    const norm = ((-pos) % h + h) % h;
-    const idx = Math.round(norm / itemW()) % maxDots;
-
-    dotEls.forEach((d, i) => {
-      d.classList.toggle('active', i === idx);
-    });
-  }
+  [['‹', 'Previous photo', -1], ['›', 'Next photo', 1]].forEach(([txt, label, dir]) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'car-arrow';
+    b.setAttribute('aria-label', label);
+    b.textContent = txt;
+    b.addEventListener('click', () => goTo(dir));
+    arrows.appendChild(b);
+  });
 
   controls.append(dotsWrap, arrows);
+  wrap.appendChild(controls);
 
-  root.insertAdjacentElement('afterend', controls);
+  function render() {
+    track.style.transform = `translate3d(${pos}px,0,0)`;
+
+    const p = period();
+    if (p <= 0) return;
+
+    const idx = Math.round((((-pos) % p) + p) % p / itemW()) % count;
+    const dot = Math.floor(idx * dotCount / count);
+
+    if (dot !== lastDot) {
+      dots.forEach((d, i) => d.classList.toggle('active', i === dot));
+      lastDot = dot;
+    }
+  }
+
+  function pause(ms) {
+    hold = true;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { hold = false; }, ms);
+  }
+
+  function goTo(dir) {
+    pause(3000);
+    const base = anim ? anim.to : pos;
+    anim = { from: pos, to: base - dir * itemW(), t0: performance.now() };
+  }
+
+  function tick(now) {
+    const dt = Math.min(now - lastTime, 50) || 16.7;
+    lastTime = now;
+
+    if (anim) {
+      const k = Math.min(1, (now - anim.t0) / 380);
+      pos = anim.from + (anim.to - anim.from) * (1 - Math.pow(1 - k, 3));
+      wrapPos();
+      render();
+      if (k === 1) anim = null;
+    } else if (autoplay && visible && !hover && !dragging && !hold) {
+      pos -= speed * dt / 16.7;
+      wrapPos();
+      render();
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+  }).observe(root);
+
+  // Drag / swipe (pointer events cover mouse, touch and pen)
+  root.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+    dragging = true;
+    captured = false;
+    anim = null;
+    moved = 0;
+    startX = e.clientX;
+    startPos = pos;
+  });
+
+  root.addEventListener('pointermove', e => {
+    if (!dragging) return;
+
+    moved = Math.max(moved, Math.abs(e.clientX - startX));
+
+    // Capture only once it is a real drag, so plain clicks still reach the photo.
+    if (!captured && moved > 6) {
+      root.setPointerCapture(e.pointerId);
+      track.classList.add('dragging');
+      captured = true;
+    }
+
+    if (captured) {
+      pos = startPos + (e.clientX - startX);
+      wrapPos();
+      render();
+    }
+  });
+
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    captured = false;
+    track.classList.remove('dragging');
+    if (moved > 6) pause(2500);
+  };
+
+  root.addEventListener('pointerup', endDrag);
+  root.addEventListener('pointercancel', endDrag);
+
+  // A drag must not open the lightbox.
+  root.addEventListener('click', e => {
+    if (moved > 6) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, true);
+
+  root.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hover = true; });
+  root.addEventListener('pointerleave', () => { hover = false; });
 
   root.setAttribute('tabindex', '0');
   root.setAttribute('role', 'region');
   root.setAttribute('aria-roledescription', 'carousel');
+  root.setAttribute('aria-label', ALT_LABELS[root.id] || 'Photo gallery');
 
   root.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      goTo(-1);
-    }
-
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      goTo(1);
-    }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(1); }
   });
+
+  render();
+  requestAnimationFrame(tick);
 }
 
 document.querySelectorAll('.carousel').forEach(initCarousel);
 
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+document.getElementById('contactForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
   const msg = document.getElementById('formMsg');
-  const name = this.name.value.trim();
-  const phone = this.phone.value.trim();
+  const f = this.elements;
+  const name = f['name'].value.trim();
+  const phone = f['phone'].value.trim();
 
-  if (!name || !phone) {
+  if (!name || phone.replace(/\D/g, '').length < 6) {
     msg.textContent = I18N[lang].error;
     msg.className = 'form-msg show err';
     return;
   }
 
+  const text = [
+    `${name}, ${phone}`,
+    `${I18N[lang].form[2]}: ${f['route'].value}`,
+    f['message'].value.trim()
+  ].filter(Boolean).join('\n');
+
   msg.textContent = I18N[lang].formInfo;
   msg.className = 'form-msg show info';
+
+  window.open('https://wa.me/79998887766?text=' + encodeURIComponent(text), '_blank', 'noopener');
 });
 
 applyLanguage();
