@@ -1,6 +1,6 @@
 const I18N = {
   ru: {
-    metaTitle: 'Кавказ Гид — туры по Северной Осетии, Ингушетии, Чечне',
+    metaTitle: 'Открой Осетию — туры по Северной Осетии, Ингушетии, Чечне',
     metaDescription: 'Авторские маршруты по Северной Осетии, Ингушетии и Чечне с местными гидами.',
     nav: ['О нас', 'Аттестаты', 'Маршруты', 'Автопарк', 'Контакты'],
     navCta: 'Связаться',
@@ -184,7 +184,7 @@ const I18N = {
     footerNav: 'Навигация',
     footerRoutes: 'Маршруты',
     footerContact: 'Контакты',
-    footerCopy: '© 2026 КавказГид. Все права защищены.',
+    footerCopy: '© 2026 Открой Осетию. Все права защищены.',
     theme: 'Тема',
     language: 'Язык',
     error: 'Пожалуйста, заполните имя и телефон.',
@@ -192,7 +192,7 @@ const I18N = {
   },
 
   en: {
-    metaTitle: 'Caucasus Guide — tours across North Ossetia, Ingushetia and Chechnya',
+    metaTitle: 'Discover Ossetia — tours across North Ossetia, Ingushetia and Chechnya',
     metaDescription: 'Original routes across North Ossetia, Ingushetia and Chechnya with local guides.',
     nav: ['About', 'Certificates', 'Routes', 'Fleet', 'Contact'],
     navCta: 'Contact us',
@@ -376,7 +376,7 @@ const I18N = {
     footerNav: 'Navigation',
     footerRoutes: 'Routes',
     footerContact: 'Contact',
-    footerCopy: '© 2026 CaucasusGuide. All rights reserved.',
+    footerCopy: '© 2026 Discover Ossetia. All rights reserved.',
     theme: 'Theme',
     language: 'Language',
     error: 'Please fill in your name and phone.',
@@ -1230,7 +1230,7 @@ document.getElementById('contactForm').addEventListener('submit', function (e) {
   msg.textContent = I18N[lang].formInfo;
   msg.className = 'form-msg show info';
 
-  window.open('https://wa.me/79998887766?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  window.open('https://wa.me/79188273049?text=' + encodeURIComponent(text), '_blank', 'noopener');
 });
 
 applyLanguage();
