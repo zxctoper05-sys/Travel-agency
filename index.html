@@ -3,18 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Кавказ Гид — туры по Северной Осетии, Ингушетии, Чечне</title>
+<title>Открой Осетию — туры по Северной Осетии, Ингушетии, Чечне</title>
 <meta name="description" content="Авторские маршруты по Северной Осетии, Ингушетии и Чечне с местными гидами.">
-<meta property="og:title" content="Кавказ Гид — туры по Северному Кавказу">
+<meta property="og:title" content="Открой Осетию — туры по Северному Кавказу">
 <meta property="og:description" content="Горные маршруты, аттестованные гиды, собственный автопарк.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0b0910">
-<script>
-(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('cg_theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t);}catch(e){}})();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,7 +15,7 @@
 
 <header id="siteHeader">
   <div class="container nav-wrap">
-    <a href="#top" class="logo">Кавказ<span>Гид</span></a>
+    <a href="#top" class="logo">Открой<span>Осетию</span></a>
 
     <nav class="main-nav" id="mainNav">
       <a href="#about">О нас</a>
@@ -37,7 +30,7 @@
       <button class="icon-btn" id="themeBtn" aria-label="Theme">☾</button>
       <a href="#contact" class="btn btn-outline">Связаться</a>
 
-      <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mainNav">
+      <button class="burger" id="burgerBtn" aria-label="Menu">
         <span></span>
         <span></span>
         <span></span>
@@ -46,8 +39,17 @@
   </div>
 </header>
 
-<main>
 <section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-slide" style="background-image:url('Bg/bg1.png')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg2.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg3.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg4.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg5.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg6.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg7.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('Bg/Bg8.jpg')"></div>
+  </div>
   <div class="container hero-content">
     <div class="hero-tags">
       Северная Осетия • Ингушетия • Чечня • Горные маршруты
@@ -71,11 +73,12 @@
   <div class="container about-grid">
 
     <div
-      class="about-photo reveal" role="img" aria-label="Осетия"
+      class="about-photo reveal"
       style="background-image:url('Ossetia/Ossetia.jpg')"
     ></div>
 
     <div class="reveal">
+      <div class="eyebrow">О нас</div>
       <h2>О нас</h2>
 
       <p>
@@ -121,14 +124,14 @@
   </div>
 </section>
 
-<section id="certificates" class="alt">
+<section id="certificates" style="background:var(--bg-alt)">
 
   <div class="container reveal">
     <div class="eyebrow">Наша команда</div>
     <h2>Аттестаты наших гидов</h2>
   </div>
 
-  <div class="container carousel-area">
+  <div class="container" style="margin-top:40px">
     <div class="carousel" id="certCarousel" data-autoplay="1">
       <div class="carousel-track" id="certTrack"></div>
     </div>
@@ -138,14 +141,14 @@
 
 <section id="routes">
 
-  <div class="container reveal routes-head">
+  <div class="container reveal" style="margin-bottom:35px">
     <div class="eyebrow">Куда поедем</div>
-    <h2>Маршруты</h2>
+    <h2 style="font-size:38px">Маршруты</h2>
   </div>
 
   <div class="route">
 
-    <div class="container route-inner reveal">
+    <div class="container route-inner reveal" style="padding:45px 32px">
 
       <div>
 
@@ -223,7 +226,7 @@
 
   <div class="route reverse">
 
-    <div class="container route-inner reveal">
+    <div class="container route-inner reveal" style="padding:45px 32px">
 
       <div class="carousel route-photos" data-autoplay="1" id="c-r2">
         <div class="carousel-track"></div>
@@ -348,7 +351,7 @@
 
   <div class="route">
 
-    <div class="container route-inner reveal">
+    <div class="container route-inner reveal" style="padding:45px 32px">
 
       <div>
 
@@ -463,7 +466,7 @@
 
   <div class="route reverse">
 
-    <div class="container route-inner reveal">
+    <div class="container route-inner reveal" style="padding:45px 32px">
 
       <div class="carousel route-photos" data-autoplay="1" id="c-r4">
         <div class="carousel-track"></div>
@@ -630,7 +633,7 @@
 
   <div class="route">
 
-    <div class="container route-inner reveal">
+    <div class="container route-inner reveal" style="padding:45px 32px">
 
       <div>
 
@@ -769,14 +772,14 @@
 
 </section>
 
-<section id="fleet" class="alt">
+<section id="fleet" style="background:var(--bg-alt)">
 
-  <div class="container">
+  <div class="container reveal">
 
     <div class="eyebrow">Транспорт</div>
     <h2>Наш автопарк</h2>
 
-    <p class="fleet-intro">
+    <p style="color:var(--text-dim);max-width:680px;margin:20px 0 60px">
       Наша команда располагает широким собственным автопарком,
       что позволяет поддерживать цены на оптимальном уровне
       и обеспечивать качественное транспортное сопровождение экскурсий.
@@ -894,7 +897,7 @@
 
       <div class="reveal">
 
-        <p class="contact-note">
+        <p style="color:var(--text-dim);margin-bottom:20px">
           Ответим в мессенджере в течение дня и поможем подобрать
           маршрут, транспорт и даты поездки.
         </p>
@@ -902,23 +905,25 @@
         <p>
 
           <a
-            href="https://t.me/+79998887766"
+            href="https://t.me/+79188273049"
             target="_blank"
             rel="noopener"
+            style="color:var(--purple-light)"
           >
-            Telegram: +7 999 888 77 66
+            Telegram: +7 918 827 30 49
           </a>
 
         </p>
 
-        <p>
+        <p style="margin-top:10px">
 
           <a
-            href="https://wa.me/79998887766"
+            href="https://wa.me/79188273049"
             target="_blank"
             rel="noopener"
+            style="color:var(--purple-light)"
           >
-            WhatsApp: +7 999 888 77 66
+            WhatsApp: +7 918 827 30 49
           </a>
 
         </p>
@@ -928,20 +933,20 @@
       <form class="reveal" id="contactForm" novalidate>
 
         <div class="form-field">
-          <label for="f-name">Имя</label>
-          <input id="f-name" type="text" name="name" autocomplete="name" required>
+          <label>Имя</label>
+          <input type="text" name="name" required>
         </div>
 
         <div class="form-field">
-          <label for="f-phone">Телефон</label>
-          <input id="f-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required>
+          <label>Телефон</label>
+          <input type="tel" name="phone" required>
         </div>
 
         <div class="form-field">
 
-          <label for="f-route">Интересующий маршрут</label>
+          <label>Интересующий маршрут</label>
 
-          <select id="f-route" name="route">
+          <select name="route">
 
             <option>Горная Ингушетия по максимуму!</option>
 
@@ -967,9 +972,9 @@
 
         <div class="form-field">
 
-          <label for="f-message">Сообщение</label>
+          <label>Сообщение</label>
 
-          <textarea id="f-message" name="message" rows="4"></textarea>
+          <textarea name="message" rows="4"></textarea>
 
         </div>
 
@@ -977,7 +982,7 @@
           Отправить заявку
         </button>
 
-        <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
+        <div class="form-msg" id="formMsg"></div>
 
       </form>
 
@@ -986,7 +991,6 @@
   </div>
 
 </section>
-</main>
 
 <footer>
 
@@ -996,8 +1000,8 @@
 
       <div>
 
-        <div class="logo footer-logo">
-          Кавказ<span>Гид</span>
+        <div class="logo" style="margin-bottom:12px">
+          Открой<span>Осетию</span>
         </div>
 
         <p>
@@ -1048,7 +1052,7 @@
         <h5>Контакты</h5>
 
         <a
-          href="https://t.me/+79998887766"
+          href="https://t.me/+79188273049"
           target="_blank"
           rel="noopener"
         >
@@ -1056,15 +1060,15 @@
         </a>
 
         <a
-          href="https://wa.me/79998887766"
+          href="https://wa.me/79188273049"
           target="_blank"
           rel="noopener"
         >
           WhatsApp
         </a>
 
-        <a href="tel:+79998887766">
-          +7 999 888 77 66
+        <a href="tel:+79188273049">
+          +7 918 827 30 49
         </a>
 
       </div>
@@ -1074,23 +1078,23 @@
     <div class="footer-bottom">
 
       <span>
-        © 2026 КавказГид. Все права защищены.
+        © 2026 Открой Осетию. Все права защищены.
       </span>
 
-      <span class="footer-tools">
+      <span style="display:flex;gap:14px">
 
         <button
-          class="link-btn"
+          class="icon-btn"
           id="langBtn2"
-          type="button"
+          style="width:auto;border:0;padding:0;color:var(--text-dim)"
         >
           RU/EN
         </button>
 
         <button
-          class="link-btn"
+          class="icon-btn"
           id="themeBtn2"
-          type="button"
+          style="width:auto;border:0;padding:0;color:var(--text-dim)"
         >
           Тема
         </button>
@@ -1105,17 +1109,17 @@
 
 <button id="toTop" aria-label="Up">↑</button>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр">
+<div class="lightbox" id="lightbox">
 
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-close" id="lbClose">&times;</button>
 
-  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">
+  <button class="lb-nav lb-prev" id="lbPrev">
     ‹
   </button>
 
   <div id="lbContent"></div>
 
-  <button class="lb-nav lb-next" id="lbNext" aria-label="Next">
+  <button class="lb-nav lb-next" id="lbNext">
     ›
   </button>
 
